@@ -1,0 +1,9 @@
+1. Activate the scanner Anaconda environment (Python 3.8.20) and open the Anaconda Prompt.
+
+2. Navigate to the folder containing the scanner control code.
+
+3. Run the following command to build a standalone .exe file using PyInstaller:
+
+pyinstaller --onefile --windowed main.py ^
+--add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4core.dll;imagingcontrol4" ^
+--add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4gui.dll;imagingcontrol4"
