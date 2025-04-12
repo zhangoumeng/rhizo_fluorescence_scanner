@@ -227,7 +227,7 @@ def data_acquisition():
                         else:
                             controller.laser565On()
                         
-                        time.sleep(current_expousre+.1)
+                        time.sleep(current_expousre+.3)
                         ic.IC_SnapImage(hGrabber, 5000)
                         ic.IC_GetImageDescription(hGrabber, Width, Height,
                                                   BitsPerPixel, colorformat)
@@ -291,10 +291,10 @@ def data_acquisition():
     
             # Save the full dataset or additional processing here
             img_full = stitch_image(image_stack, xy_step_scan, x_slices, y_slices)
-            file_path = os.path.join(path_name, f"{file_name}_1_stitch_{file_number}.tif")
+            file_path = os.path.join(path_name, f"{file_name}_green_stitch_{file_number}.tif")
             with tifffile.TiffWriter(file_path, append=True) as tf:
                 tf.write(img_full[:,:,0])
-            file_path = os.path.join(path_name, f"{file_name}_2_stitch_{file_number}.tif")
+            file_path = os.path.join(path_name, f"{file_name}_red_stitch_{file_number}.tif")
             with tifffile.TiffWriter(file_path, append=True) as tf:
                 tf.write(img_full[:,:,1])
                 

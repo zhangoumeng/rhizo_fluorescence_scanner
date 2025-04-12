@@ -6,4 +6,14 @@
 
 pyinstaller --onefile --windowed main.py ^
 --add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4core.dll;imagingcontrol4" ^
---add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4gui.dll;imagingcontrol4"
+--add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4gui.dll;imagingcontrol4" ^
+--hidden-import=scipy.io --hidden-import=scipy.io.matlab --hidden-import=scipy.io.matlab.mio5
+
+or
+
+pyinstaller --onefile --console main.py ^
+--add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4core.dll;imagingcontrol4" ^
+--add-binary "C:\Users\biophotonics\anaconda3\envs\scanner\Lib\site-packages\imagingcontrol4\ic4gui.dll;imagingcontrol4" ^
+--hidden-import=scipy.io --hidden-import=scipy.io.matlab --hidden-import=scipy.io.matlab.mio5
+
+for troubleshooting.
