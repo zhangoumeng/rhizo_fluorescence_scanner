@@ -193,6 +193,8 @@ def data_acquisition():
         profile_488 = mat_data.get('profile_488')
         profile_565 = mat_data.get('profile_565') 
         
+        adaptive_exp = adaptive_exposure.get()
+        
         exposureList = []
         
         controller.laser488Off()
@@ -298,7 +300,7 @@ def data_acquisition():
             with tifffile.TiffWriter(file_path, append=True) as tf:
                 tf.write(img_full[:,:,1])
                 
-            if img_max_val>200:
+            if img_max_val > 200 and adaptive_exp:
                 ic.IC_SetPropertyAbsoluteValue(hGrabber, "Exposure".encode("utf-8"),
                                                "Value".encode("utf-8"), ctypes.c_float(current_expousre/2))
             
@@ -318,7 +320,7 @@ def data_acquisition():
         window.destroy()
     
     root = tk.Tk()
-    root.geometry("480x480")
+    root.geometry("480x520")
     root.title("Data Acquisition Settings")
     
     # Create Labels and Entry widgets for each parameter
@@ -358,9 +360,14 @@ def data_acquisition():
     xy_step_entry.insert(0, "3")
     xy_step_entry.place(x=240, y=300, width=180, height=30)
     
+    adaptive_exposure = tk.BooleanVar()
+    adaptive_exposure_label = tk.Checkbutton(root, text = "Use Adaptive Exposure", variable = adaptive_exposure,
+                             onvalue=True, offvalue=False, font=("Arial", 10))
+    adaptive_exposure_label.place(x=240, y=340, width=180, height=30)
+    
     # Button to submit the form
     submit_btn = tk.Button(root, text="Start Data Acquisition", font=("Arial", 10), command=start_acquisition)
-    submit_btn.place(x=120, y=360, width=240, height=30)
+    submit_btn.place(x=120, y=400, width=240, height=30)
     
     # Start the Tkinter main loop
     root.mainloop()
@@ -373,6 +380,7 @@ controller = ad.ArduinoController('COM4')
 # Set up the Tkinter window
 window = tk.Tk()
 window.geometry("1280x720")  # Set the window size, adjust as needed
+window.title("Fluorescence Scanner")
 
 # Image display (right side)
 label = tk.Label(window)
@@ -437,7 +445,7 @@ xy_pos_label = tk.Label(window, text="Current Position (mm): [0.00, 0.00, 0.00]"
 xy_pos_label.place(x=60, y=300)
 
 # LED control buttons
-LED_488_label = tk.Label(window, text="488 LED", font=("Arial", 10))
+LED_488_label = tk.Label(window, text="470 LED", font=("Arial", 10))
 LED_488_label.place(x=60, y=390, width=120, height=30)
 LED_565_label = tk.Label(window, text="565 LED", font=("Arial", 10))
 LED_565_label.place(x=240, y=390, width=120, height=30)
