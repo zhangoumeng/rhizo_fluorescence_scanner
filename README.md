@@ -18,7 +18,12 @@
 
 ## Overview
 
-**(content placeholder)**
+This repository contains the control code for a fluorescence scanner system designed for **timelapse imaging of large biological samples**.
+
+The system integrates:
+- An Arduino for controlling the XY stage and LED illumination,
+- A CONEX-CC controller for Z-axis positioning,
+- And IC Imaging Control for camera operation and image acquisition.
 
 ## Hardware
 
@@ -69,7 +74,14 @@ The control code is available on GitHub:
 
 ### Python Scanner GUI
 
-**(content placeholder)**
+### Main GUI Window
+
+The main GUI window controls the scanner and displays live images:
+
+- **XY Positioning**: Moves the microscope module horizontally to scan different areas of the sample.
+- **Z Positioning**: Adjusts the vertical position of the microscope module to bring the sample into focus.
+- **LED Control**: Turns the 470 nm (blue) and 565 nm (green) LEDs on or off.
+- **Live View Panel**: The panel on the right displays the live camera feed for real-time visualization.
 
 ![Python GUI](figures/fig_gui.jpg)
 
@@ -100,6 +112,9 @@ This window contains settings for XY-*t* scanning. Configurable parameters:
 - Time interval between scans  
 - Number of time points  
 - XY scan range and step size (default: 3 mm, ~22% FOV overlap)
+
+**Scan start position**:  
+The XY scan always begins from the **back-left** corner of the specified scan area.
 
 **Adaptive exposure control**:  
 When enabled, exposure time is halved if high intensities are detected, preventing saturation.  
