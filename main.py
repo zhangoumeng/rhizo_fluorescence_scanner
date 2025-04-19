@@ -375,7 +375,7 @@ def data_acquisition():
 # ConexCC, Arduino, and imaging setup
 cc.ConexCC.dump_possible_states()
 conex_cc = cc.ConexCC(com_port='COM3', velocity=5)
-controller = ad.ArduinoController('COM4')
+controller = ad.ArduinoController('COM5')
 
 # Set up the Tkinter window
 window = tk.Tk()
