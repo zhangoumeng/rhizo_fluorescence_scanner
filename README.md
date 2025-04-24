@@ -25,6 +25,8 @@ The system integrates:
 - A CONEX-CC controller for Z-axis positioning,
 - And IC Imaging Control for camera operation and image acquisition.
 
+![System](figures/fig_system.jpg)
+
 ## Hardware
 
 ### Arduino-Controlled XY Stage and LED
@@ -55,12 +57,12 @@ The entire fluorescence imaging module is mounted on a translational stage contr
 ![Fluorescence imaging](figures/fig_spec.png)
 
 The fluorescence imaging system features two excitation lines:  
-- The blue LED is filtered by a Thorlabs **[XX]** bandpass filter for GFP excitation  
-- The green LED is filtered by a Thorlabs **FBH561-3** bandpass filter for RFP excitation  
+- The blue LED is filtered by a Thorlabs **MF469-35** bandpass filter for GFP excitation  
+- The green LED is filtered by Thorlabs **FBH561-3** and Thorlabs **FBH560-10** bandpass filters for RFP excitation  
 
 The excitation beams are combined using a dichroic mirror (Thorlabs DMSP505) and directed to the sample via another dichroic mirror (Semrock Di01-R488/561).
 
-Fluorescence emission is collected by an **[XX]** objective lens and filtered by a bandpass emission filter (Semrock FF01-523/610). A tube lens (f = 50 mm) forms the image on the camera (ImagingSource DMK 72BUC02).  
+Fluorescence emission is collected by an **Olympus PLN Plan Achromat 4x 0.10 NA** objective lens and filtered by a bandpass emission filter (Semrock FF01-523/610). A tube lens (f = 50 mm) forms the image on the camera (ImagingSource DMK 72BUC02).  
 - Effective pixel size (object space): 1.98 µm  
 - Default pixel size in saved images: 9.9 µm  
 - Field of view (FOV): 3.85 × 5.13 mm²
@@ -118,6 +120,7 @@ The XY scan always begins from the **back-left** corner of the specified scan ar
 
 **Adaptive exposure control**:  
 When enabled, exposure time is halved if high intensities are detected, preventing saturation.  
+This option is recommended for samples that become brighter over time.  
 Each FOV image, the stitched image, and an exposure time list are saved.
 
 ![Data acquisition](figures/fig_acquisition.jpg)
