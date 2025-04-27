@@ -10,7 +10,6 @@ import imagingcontrol4 as ic4
 import os
 import cv2
 import tifffile
-import scipy
 
 def update_frame():
     ic.IC_SnapImage(hGrabber, 2000)
@@ -189,9 +188,10 @@ def data_acquisition():
         
     def start_acquisition():
         
-        mat_data = scipy.io.loadmat('excitation_profile.mat')
-        profile_488 = mat_data.get('profile_488')
-        profile_565 = mat_data.get('profile_565') 
+        profile_470 = cv2.imread('profile_470.bmp', cv2.IMREAD_GRAYSCALE)
+        profile_565 = cv2.imread('profile_565.bmp', cv2.IMREAD_GRAYSCALE)
+        profile_470 = profile_470.astype(np.float32) / 255.0
+        profile_565 = profile_565.astype(np.float32) / 255.0
         
         adaptive_exp = adaptive_exposure.get()
         
@@ -229,8 +229,11 @@ def data_acquisition():
                         else:
                             controller.laser565On()
                         
-                        time.sleep(current_expousre+.3)
+                        time.sleep(.3)
                         ic.IC_SnapImage(hGrabber, 5000)
+                        time.sleep(.1)
+                        ic.IC_SnapImage(hGrabber, 5000)
+                        time.sleep(.1)
                         ic.IC_GetImageDescription(hGrabber, Width, Height,
                                                   BitsPerPixel, colorformat)
                         
@@ -265,7 +268,7 @@ def data_acquisition():
 
                         # Process image based on excitation line
                         if excitation_line == 1:
-                            image_stack[:, :, num_img_captured_t, 0] = (imageDataTmp.astype(np.float64) * profile_488).astype(np.uint8)
+                            image_stack[:, :, num_img_captured_t, 0] = (imageDataTmp.astype(np.float64) * profile_470).astype(np.uint8)
                         else:
                             image_stack[:, :, num_img_captured_t, 1] = (imageDataTmp.astype(np.float64) * profile_565).astype(np.uint8)
     
@@ -305,8 +308,10 @@ def data_acquisition():
                                                "Value".encode("utf-8"), ctypes.c_float(current_expousre/2))
             
             exposureList.append(current_expousre)
-            file_path = os.path.join(path_name, f"{file_name}_exposureList.mat")
-            scipy.io.savemat(file_path, {'exposureList': exposureList})
+            file_path_txt = os.path.join(path_name, f"{file_name}_exposureList.txt")
+            with open(file_path_txt, 'w') as f:
+                for exposure in exposureList:
+                    f.write(f"{exposure}\n")
 
             controller.laser488Off()
             controller.laser565Off()
@@ -319,7 +324,7 @@ def data_acquisition():
         root.destroy()
         window.destroy()
     
-    root = tk.Tk()
+    root = tk.Toplevel(window)
     root.geometry("480x520")
     root.title("Data Acquisition Settings")
     
@@ -360,7 +365,6 @@ def data_acquisition():
     xy_step_entry.insert(0, "3")
     xy_step_entry.place(x=240, y=300, width=180, height=30)
     
-    adaptive_exposure = tk.BooleanVar()
     adaptive_exposure_label = tk.Checkbutton(root, text = "Use Adaptive Exposure", variable = adaptive_exposure,
                              onvalue=True, offvalue=False, font=("Arial", 10))
     adaptive_exposure_label.place(x=240, y=340, width=180, height=30)
@@ -381,6 +385,8 @@ controller = ad.ArduinoController('COM5')
 window = tk.Tk()
 window.geometry("1280x720")  # Set the window size, adjust as needed
 window.title("Fluorescence Scanner")
+
+adaptive_exposure = tk.BooleanVar()
 
 # Image display (right side)
 label = tk.Label(window)
